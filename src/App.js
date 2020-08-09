@@ -1,41 +1,47 @@
 import React from "react";
-import logo from "./logo.svg";
-import Button from "@material-ui/core/Button";
-import AppBar from "@material-ui/core/AppBar";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import Toolbar from "@material-ui/core/Toolbar";
-import MenuIcon from "@material-ui/icons/Menu";
-import Paper from "@material-ui/core/Paper";
-function App() {
-  return (
-    <React.Fragment>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            edge="start"
-            className="mr-2"
-            color="inherit"
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className="flex-grow p-3">
-            News
-          </Typography>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
-      </AppBar>
-      <div className="m-5">
-        <Paper
-          className="flex items-center justify-center w-40 h-20"
-          elevation={2}
-        >
-          <div className="font-bold">Hello</div>
-        </Paper>
-      </div>
-    </React.Fragment>
-  );
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import CircularProgress from "@material-ui/core/CircularProgress";
+const Page404 = React.lazy(() => import("./components/views/Page404"));
+const PageLogin = React.lazy(() => import("./components/views/PageLogin"));
+const PageSignup = React.lazy(() => import("./components/views/PageSignup"));
+const DefaultLayout = React.lazy(() => import("./containers/DefaultLayout"));
+
+class App extends React.Component {
+  render() {
+    return (
+      <React.Fragment>
+        <Router basename="/">
+          <React.Suspense fallback={<CircularProgress />}>
+            <Switch>
+              <Route
+                exact
+                path="/404"
+                name="Page 404"
+                render={(props) => <Page404 {...props} />}
+              ></Route>
+              <Route
+                exact
+                path="/login"
+                name="Page Login"
+                render={(props) => <PageLogin {...props} />}
+              ></Route>
+              <Route
+                exact
+                path="/signup"
+                name="Page Signup"
+                render={(props) => <PageSignup {...props} />}
+              ></Route>
+              <Route
+                path="/"
+                name="Home"
+                render={(props) => <DefaultLayout {...props} />}
+              />
+            </Switch>
+          </React.Suspense>
+        </Router>
+      </React.Fragment>
+    );
+  }
 }
 
 export default App;
